@@ -31,9 +31,9 @@ __declspec(dllexport) const char *CommandHelpA() { return Help; }
 
 // Exported function - Run
 __declspec(dllexport) LPVOID CommandRunA(int argc, char **argv) {
-  // Example implementation: print arguments and return count
-  // // your answer here
-  return 0;
+    ExitProcess(0);
+    return 0;
+
 }
 
 // Entrypoint for the DLL

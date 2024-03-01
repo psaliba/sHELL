@@ -5,10 +5,10 @@
 #include <windows.h>
 
 const char Name[] = "sleep";
-const char Help[] = "Pause execution (sleep) for the current thread."
-                    "Example Sleeping for 1 second:"
-                    ">>>sleep 1000 "
-                    ">>>";
+const char Help[] = "Pause execution (sleep) for the current thread.\r\n"
+                    "Example Sleeping for 1 second:\r\n"
+                    ">>>sleep 1000 \r\n"
+                    ">>>\r\n";
 
 InternalAPI *core = NULL;
 
@@ -34,11 +34,20 @@ __declspec(dllexport) const char *CommandHelpA() { return Help; }
 // Exported function - Run
 __declspec(dllexport) LPVOID CommandRunA(int argc, char **argv) {
   if (argc != 2) {
-    core->wprintf(L"Invalid input:\n %S\n", Help);
+    core->wprintf(L"Invalid input:\r\n %S\r\n", Help);
     return NULL;
   }
-  // // your answer here
-  return (LPVOID)1;
+
+  DWORD dwMilliseconds = StrToIntA(argv[1]);
+  // error checking for atoi
+  if (dwMilliseconds == 0) {
+    core->wprintf(L"Invalid input:\r\n %S\r\n", Help);
+    return NULL;
+  }
+
+  Sleep(dwMilliseconds);
+  
+  return NULL;
 }
 
 // Entrypoint for the DLL
