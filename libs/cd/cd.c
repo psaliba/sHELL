@@ -31,10 +31,16 @@ __declspec(dllexport) const char *CommandHelpA() { return Help; }
 // Exported function - Run
 __declspec(dllexport) LPVOID CommandRunA(int argc, char **argv) {
   if (argc != 2) {
-    core->wprintf(L"Invalid arguments.\n%s", CommandHelp());
+    core->wprintf(L"Invalid arguments.\n%s", CommandHelpA());
     return NULL; // Error code for invalid arguments
   }
   // // your answer here
+
+  if (SetCurrentDirectoryA(argv[1]) == 0) {
+    core->wprintf(L"Error changing directory to %S: %d\n", argv[1], GetLastError());
+    return NULL; // Error code for directory change failure
+  }
+
   return (LPVOID)1; // Success indicates directory change
 }
 

@@ -6,7 +6,7 @@
 const char Name[] = "pwd";
 const char Help[] = "Print the shell's current working directory.\n"
                     "Usage:\n"
-                    "    pwd C:\\vagrant";
+                    "    pwd";
 
 InternalAPI *core = NULL;
 
@@ -37,9 +37,17 @@ __declspec(dllexport) LPVOID CommandRunA(int argc, char **argv) {
   char *cwd = (char *)core->malloc(bufferSize);
   if (cwd == NULL) {
     core->wprintf(L"Failed to allocate memory for CWD.\n");
-    return 1; // Error code for memory allocation failure
+    return (LPVOID)1; // Error code for memory allocation failure
   }
-  // // your answer here
+  
+  if (GetCurrentDirectoryA(bufferSize, cwd) == 0) {
+    core->wprintf(L"Error getting current directory: %d\n", GetLastError());
+    core->free(cwd);
+    return NULL; // Error code for directory retrieval failure
+  }
+
+  core->wprintf(L"%S\n", cwd);
+
   return lpOut; // Success
 }
 
