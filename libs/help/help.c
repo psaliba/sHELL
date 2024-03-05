@@ -5,7 +5,7 @@
 const char Name[] = "help";
 const char Help[] =
     "Print help messages for commands.\r\n"
-    "Passed with no command names, it prints all avaiable commands help message"
+    "Passed with no command names, it prints all available commands help message"
     ">>>help echo\r\n"
     "echo a string back to the terminal. Example:...\r\n";
 
@@ -35,31 +35,33 @@ __declspec(dllexport) const char *CommandHelpA() { return Help; }
 __declspec(dllexport) LPVOID CommandRunA(int argc, char **argv) {
   long long unsigned int mods = *core->gModuleCount;
 
-  // use djbhash to compare the command name with the passed args
-  // got to iterate through all the passed args tho
-  // maybe build an array of mods that are passed? 
-
+  // not very efficient but whatever its like 10 commands
   if (argc > 1) {
+    for (int i = 1; i < argc; i++) {
+      unsigned char *cmd = argv[i];
+      unsigned long hash = core->djb2hash(cmd);
 
-    for (size_t i = 0; i < mods; i++) {
-      
-      // cant use strcmp
-      if (strcmp(core->gaCommandsA[i].fnName(), argv[1]) == 0) {
-        core->wprintf(L"Module Name: %S\r\n", core->gaCommandsA[i].fnName());
-        core->wprintf(L"Module Help: %S\r\n", core->gaCommandsA[i].fnHelp());
-        return NULL;
+      for (size_t j = 0; j < mods; j++) {
+        unsigned long modHash = core->djb2hash(core->gaCommandsA[j].fnName());
+
+        if (modHash == hash) {
+          core->wprintf(L"++++++++++++++++++++++++++\r\n");
+          core->wprintf(L"Module Name: %S\r\n", core->gaCommandsA[j].fnName());
+          core->wprintf(L"Module Help: %S\r\n", core->gaCommandsA[j].fnHelp());
+          core->wprintf(L"---------------------------\r\n");
+        }
       }
     }
-    core->wprintf(L"Command not found: %S\r\n", argv[1]);
-    return NULL;
-  }
+  } else {
   for (size_t i = 0; i < mods; i++) {
+    core->wprintf(L"++++++++++++++++++++++++++\r\n");
     core->wprintf(L"Module Name: %S\r\n", core->gaCommandsA[i].fnName());
     core->wprintf(L"Module Help: %S\r\n", core->gaCommandsA[i].fnHelp());
     core->wprintf(L"---------------------------\r\n");
   }
   return NULL;
 
+}
 }
 
 // Entrypoint for the DLL

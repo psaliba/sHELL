@@ -42,6 +42,7 @@ BOOL InitializeCore() {
   core->calloc = s_calloc;
   core->realloc = s_realloc;
 
+  core->strcpy = strcpy;
   core->strcmp = strcmp;
   core->strlen = strlen;
   core->memset = memset;
