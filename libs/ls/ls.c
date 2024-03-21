@@ -81,7 +81,7 @@ int listFiles(char *szDir, BOOL recursive, BOOL allFiles, BOOL longFormat, size_
       SYSTEMTIME st;
       ftAccess = ffd.ftLastAccessTime;
       FileTimeToSystemTime(&ftAccess, &st);
-      core->wprintf(L"  %S |  %ld bytes | Last Accessed at %04d-%02d-%02d %02d:%02d:%02d\n", ffd.cFileName, filesize.QuadPart, st.wYear, st.wMonth, st.wDay,
+      core->wprintf(L"  %S |  %lld bytes | Last Accessed at %04d-%02d-%02d %02d:%02d:%02d\n", ffd.cFileName, filesize.QuadPart, st.wYear, st.wMonth, st.wDay,
         st.wHour, st.wMinute, st.wSecond);
     } else {
       core->wprintf(L"  %S\n", ffd.cFileName);
