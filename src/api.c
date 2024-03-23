@@ -96,8 +96,10 @@ BOOL ResolveCommandDependencies(CommandDependency deps[]) {
   // O(n^2) dummy resolver
   debug_wprintf(L"[+] Resolving Dependencies...\n");
   for (int i = 0; deps[i].hash + deps[i].lpCmd != 0; i++) {
+    debug_wprintf(L"Resolving %lu\n", deps[i].hash);
     // dumb linear search for cmd
     for (int j = 0; j < gModuleCount; j++) {
+      debug_wprintf(L"Checking %lu\n", gaCommandsA[j].hash);
       if (gaCommandsA[j].hash == deps[i].hash) {
         deps[i].lpCmd = &(gaCommandsA[j]);
         break;

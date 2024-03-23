@@ -79,6 +79,23 @@ __declspec(dllexport) LPVOID CommandRunA(int argc, char **argv) {
 
   LPVOID readfOut = NULL;
   // // your answer here
+  for (int i = 1; i < argc; i++) {
+    int readfArgc = 0;
+    char **readfArgv = FileNameToArgv(&readfArgc, argv[i]);
+    if (readfArgv == NULL) {
+      core->wprintf(L"Error converting filename to argv\n");
+      return NULL;
+    }
+    readfOut = readf->fnRun(readfArgc, readfArgv);
+    if (readfOut == NULL) {
+      core->wprintf(L"Error running readf\n");
+      return NULL;
+    }
+    core->WriteStdOutLarge(
+      ((CommandOut_readf*)readfOut)->lpBuffer, 
+      ((CommandOut_readf*)readfOut)->qwFileSize.QuadPart);
+    core->free(readfArgv);
+  }
   return readfOut;
 }
 

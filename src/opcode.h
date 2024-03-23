@@ -10,3 +10,4 @@
 #define OPCODE_hex 193493706
 #define OPCODE_exit 2090237503
 #define OPCODE_help 2090324718
+#define OPCODE_readf 273085895

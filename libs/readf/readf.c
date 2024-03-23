@@ -56,11 +56,11 @@ BOOL LoadFileA(char *filePath)
     core->wprintf(L"Error opening file. (%d)\n", GetLastError());
     return FALSE;
   }
-  core->wprintf(L"File opened successfully\n");
+  debug_wprintf(L"File opened successfully\n");
 
   // Get the file size
   GetFileSizeEx(hFile, &lpOut->qwFileSize);
-  core->wprintf(L"File size is %llu\n", lpOut->qwFileSize.QuadPart);
+  debug_wprintf(L"File size is %llu\n", lpOut->qwFileSize.QuadPart);
 
   // need to allocate mem for the entire file space, not just the quad part 
 
@@ -71,17 +71,12 @@ BOOL LoadFileA(char *filePath)
     core->wprintf(L"Memory allocation failed\n");
     return FALSE;
   }
-  core->wprintf(L"Memory allocated successfully\n");
-  core->wprintf(L"Buffer is at %p\n", lpOut->lpBuffer);
+  debug_wprintf(L"Memory allocated successfully\n");
+  debug_wprintf(L"Buffer is at %p\n", lpOut->lpBuffer);
   // Read the file into the buffer
   DWORD bytesRead = 0;
   long long int totalBytesRead = 0;
 
-  // if(!ReadFile(hFile, lpOut->lpBuffer, lpOut->qwFileSize.QuadPart, &bytesRead, NULL)){
-  //   core->wprintf(L"Error reading file. (%d)\n", GetLastError());
-  //   return FALSE;
-  // }
-  // core->wprintf(L"Read %lld bytes\n", bytesRead);
   DWORD sizeToRead = lpOut->qwFileSize.QuadPart < chunkSize ? lpOut->qwFileSize.QuadPart : chunkSize;
 
   while (ReadFile(hFile, lpOut->lpBuffer + totalBytesRead, sizeToRead, &bytesRead, NULL))
