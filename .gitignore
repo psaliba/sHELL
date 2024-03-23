@@ -2,4 +2,6 @@
 *.dll
 *.pdb 
 djb
-
+dist/
+.vscode
+.DS_Store
